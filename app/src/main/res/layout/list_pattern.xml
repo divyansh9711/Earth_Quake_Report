@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:padding="3dp">
+    <TextView
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:id="@+id/magnitude"
+        android:background="@drawable/magnitude_circle"
+        tools:text="8.9"
+        android:layout_weight="0.5"
+        android:layout_width="0dp"
+        android:layout_height="55dp" />
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1.5"
+        android:orientation="vertical"
+        android:weightSum="2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_part1"
+            android:fontFamily="sans-serif-medium"
+            android:layout_weight="0.5"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:text="near by"
+            android:textSize="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+        <TextView
+            android:layout_gravity="center"
+            android:textColor="@color/textColorEarthquakeLocation"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_weight="1.5"
+            android:id="@+id/text_part2"
+            tools:text="San Fransisco,CA"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginRight="1dp"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:layout_marginEnd="1dp"
+            android:layout_gravity="end"
+            android:textSize="15sp"
+            android:textAlignment="textEnd"
+            tools:text="Mar,6 2017"
+            android:layout_weight="1"
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+        <TextView
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:layout_marginRight="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_gravity="end"
+            android:id="@+id/time"
+            android:text="22:00"
+            android:textAlignment="textEnd"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>
