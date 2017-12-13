@@ -16,42 +16,56 @@
 package com.example.android.quakereport;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.content.AsyncTaskLoader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<EarthQuake>> {
-    private static final String USGS_REQUEST_URL =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=5&limit=10";
+    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=5&limit=10";
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
     EarthQuakeAdapter adapter;
-
+    private TextView mEmptyStateTextView;
+    private ProgressBar spinner;
+    ConnectivityManager cm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-
+        Log.e("LOG 1", "On create called");
 
         ArrayList<EarthQuake> earthquakes = new ArrayList<EarthQuake>();
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
         adapter = new EarthQuakeAdapter(this, earthquakes);
         earthquakeListView.setAdapter(adapter);
+
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        earthquakeListView.setEmptyView(mEmptyStateTextView);
+        spinner = (ProgressBar) findViewById(R.id.spin);
+        spinner.setVisibility(View.VISIBLE);
+
+         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
         LoaderManager loaderManager = getLoaderManager();
         loaderManager.initLoader(1, null, this);
-
-
+        Log.e("LOG 2", "INIT loader called");
 
 
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,30 +77,39 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
                 startActivity(inten);
             }
         });
-
     }
-
-
 
 
     @Override
     public Loader<List<EarthQuake>> onCreateLoader(int i, Bundle bundle) {
-        return new com.example.android.quakereport.EarthQuakeLoader(EarthquakeActivity.this,USGS_REQUEST_URL);
+        Log.e("LOG 3", "LOG on create called");
+        return new com.example.android.quakereport.EarthQuakeLoader(EarthquakeActivity.this, USGS_REQUEST_URL);
     }
-
     @Override
     public void onLoadFinished(Loader<List<EarthQuake>> loader, List<EarthQuake> earthQuakes) {
+        Log.e("LOG 4", "LOG on finished called");
         adapter.clear();
         if (earthQuakes != null && !earthQuakes.isEmpty()) {
             adapter.addAll(earthQuakes);
         }
-    }
+        mEmptyStateTextView.setText(R.string.no_earthquakes);
+        spinner.setVisibility(View.INVISIBLE);
 
-    @Override
-    public void onLoaderReset(Loader<List<EarthQuake>> loader) {
-            adapter.clear();
+
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(!isConnected){
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
 
+    }
+    @Override
+    public void onLoaderReset(Loader<List<EarthQuake>> loader) {
+        Log.e("LOG 5", "LOG on reset called");
+        adapter.clear();
+    }
 }
 
 

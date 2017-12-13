@@ -1,6 +1,7 @@
 package com.example.android.quakereport;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.android.quakereport.EarthQuake;
 import com.example.android.quakereport.QueryUtils;
@@ -18,6 +19,8 @@ public class EarthQuakeLoader extends AsyncTaskLoader<List<EarthQuake>> {
 
     public EarthQuakeLoader(Context context, String url) {
         super(context);
+        Log.e("LOG 6","Eqloader constructor");
+
         mUrl = url;
     }
     @Override
@@ -27,6 +30,8 @@ public class EarthQuakeLoader extends AsyncTaskLoader<List<EarthQuake>> {
 
     @Override
     public List<EarthQuake> loadInBackground() {
+        Log.e("LOG 7","Workin in backgroud");
+
         if (mUrl == null) {
             return null;
         }
