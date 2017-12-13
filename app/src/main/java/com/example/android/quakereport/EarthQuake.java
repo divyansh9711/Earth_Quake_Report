@@ -32,7 +32,7 @@ public class EarthQuake {
 
         this.miliTime = mDate;
         date = new Date(mDate);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM DD, yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM D, yyyy");
         dateToDisplay = simpleDateFormat.format(date);
         SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm a");
         time = simpleTimeFormat.format(date);

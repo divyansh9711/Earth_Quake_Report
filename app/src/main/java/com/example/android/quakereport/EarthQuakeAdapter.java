@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ public class EarthQuakeAdapter extends ArrayAdapter<EarthQuake> {
 
 
         String location = curretnEarthQuake.getmLocation();
-        if(location.contains("o")){
+        if(location.contains("of")){
             String[] parts = location.split(" of ");
             part1 = parts[0] + " of ";
             part2 = parts[1];

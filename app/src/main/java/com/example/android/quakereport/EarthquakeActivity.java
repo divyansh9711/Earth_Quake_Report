@@ -15,8 +15,11 @@
  */
 package com.example.android.quakereport;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
+import android.content.AsyncTaskLoader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,22 +28,31 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<EarthQuake>> {
+    private static final String USGS_REQUEST_URL =
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=5&limit=10";
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
+    EarthQuakeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        // Create a fake list of earthquake locations.
-        ArrayList<EarthQuake> earthquakes = QueryUtils.extractEarthquakes();
 
-        final ListView earthquakeListView = (ListView) findViewById(R.id.list);
-        final EarthQuakeAdapter adapter= new EarthQuakeAdapter(this,earthquakes);
+
+        ArrayList<EarthQuake> earthquakes = new ArrayList<EarthQuake>();
+        ListView earthquakeListView = (ListView) findViewById(R.id.list);
+        adapter = new EarthQuakeAdapter(this, earthquakes);
         earthquakeListView.setAdapter(adapter);
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(1, null, this);
+
+
+
 
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -51,5 +63,34 @@ public class EarthquakeActivity extends AppCompatActivity {
                 startActivity(inten);
             }
         });
+
     }
+
+
+
+
+    @Override
+    public Loader<List<EarthQuake>> onCreateLoader(int i, Bundle bundle) {
+        return new com.example.android.quakereport.EarthQuakeLoader(EarthquakeActivity.this,USGS_REQUEST_URL);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<EarthQuake>> loader, List<EarthQuake> earthQuakes) {
+        adapter.clear();
+        if (earthQuakes != null && !earthQuakes.isEmpty()) {
+            adapter.addAll(earthQuakes);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<EarthQuake>> loader) {
+            adapter.clear();
+        }
+
 }
+
+
+
+
+
+
